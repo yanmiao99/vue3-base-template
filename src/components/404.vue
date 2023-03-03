@@ -1,8 +1,8 @@
 <template>
-<div class="404">404</div>
+  <div class="404">404</div>
 </template>
 
-<script>
+<script setup lang="ts">
 
 </script>
 
