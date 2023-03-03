@@ -19,16 +19,16 @@ const routes = [
       title: '首页'
     },
     component: () => import('../layout/Layout.vue'),
-    // children: [
-    //   {
-    //     name: 'welcome',
-    //     path: '/welcome',
-    //     meta: {
-    //       title: '欢迎'
-    //     },
-    //     component: () => import('../views/Welcome.vue'),
-    //   },
-    // ]
+    children: [
+      {
+        name: 'welcome',
+        path: '/welcome',
+        meta: {
+          title: '欢迎'
+        },
+        component: () => import('../views/Welcome.vue'),
+      },
+    ]
   },
   {
     name: 'login',

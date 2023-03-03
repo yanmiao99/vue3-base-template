@@ -2,7 +2,7 @@
   <div class="basic-layout">
     <div class="nav-side">
       <div class="logo" v-show="!isCollapse">
-        <img src="@/assets/images/logo.png" alt="">
+        <img src="@/assets/images/logo.svg" alt="logo">
         <h1>租物之家运营中心</h1>
       </div>
       <el-menu

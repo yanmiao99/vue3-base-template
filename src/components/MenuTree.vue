@@ -22,9 +22,7 @@
       <el-icon v-if="menu.icon">
         <component :is="menu.icon"/>
       </el-icon>
-      <span slot="title">
-          {{ menu.menuName }}
-        </span>
+      <template #title>{{ menu.menuName }}</template>
     </el-menu-item>
   </template>
 </template>
@@ -35,8 +33,7 @@ import {defineProps} from 'vue'
 defineProps({
   userMenu: {
     type: Object,
-    default: () => {
-    },
+    default: () => {},
     required: true
   },
 })
