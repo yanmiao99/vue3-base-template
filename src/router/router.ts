@@ -1,4 +1,5 @@
 import {createRouter, createWebHashHistory} from "vue-router";
+import menuList from "../mock/menuList";
 /*
 * createRouter 路由器
 * createWebHashHistory  Hash
@@ -13,45 +14,21 @@ const routes = [
   {
     name: 'layout',
     path: '/',
-    redirect: '/welcome', // 必须使用 path 或者 name
+    // redirect: '/welcome', // 必须使用 path 或者 name
     meta: {
       title: '首页'
     },
     component: () => import('../layout/Layout.vue'),
-    children: [
-      {
-        name: 'welcome',
-        path: '/welcome',
-        meta: {
-          title: '欢迎'
-        },
-        component: () => import('../views/Welcome.vue'),
-      },
-      {
-        name: 'test',
-        path: '/test',
-        meta: {
-          title: '测试'
-        },
-        component: () => import('../views/Test.vue'),
-      },
-      {
-        name: 'home',
-        path: '/home',
-        meta: {
-          title: '首页'
-        },
-        component: () => import('../views/Home.vue'),
-      },
-      {
-        name: 'about',
-        path: '/about',
-        meta: {
-          title: '关于'
-        },
-        component: () => import('../views/About.vue'),
-      },
-    ]
+    // children: [
+    //   {
+    //     name: 'welcome',
+    //     path: '/welcome',
+    //     meta: {
+    //       title: '欢迎'
+    //     },
+    //     component: () => import('../views/Welcome.vue'),
+    //   },
+    // ]
   },
   {
     name: 'login',
@@ -76,9 +53,34 @@ const router = createRouter({
   routes
 })
 
+const routerTreeFn = (list: any) => {
+  // 首先把你需要动态路由的组件地址全部获取
+  // @ts-ignore
+  let modules = import.meta.glob('../views/**/*.vue')
+  list.forEach(((menu: any) => {
+    if (menu.children && menu.children.length > 0 && menu.children[0].menuType.toString() === '1') {
+      routerTreeFn(menu.children)
+    } else if (menu.menuType.toString() === '1') {
+      router.addRoute('layout', {
+        path: menu.path,
+        name: menu.path,
+        meta: {
+          title: menu.menuName
+        },
+        component: modules[`../views${menu.path}.vue`]
+      })
+    }
+  }))
+}
+
 // 设置浏览器标题
 router.beforeEach((to, from, next) => {
+  // 动态设置浏览器标题
   document.title = to.meta.title as string
+
+  // 动态设置路由
+  routerTreeFn(menuList)
+
   next()
 })
 

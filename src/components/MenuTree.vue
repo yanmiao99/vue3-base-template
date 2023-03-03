@@ -1,32 +1,45 @@
 <template>
-  <el-menu-item index="/welcome">
-    <el-icon>
-      <Menu/>
-    </el-icon>
-    <template #title>欢迎</template>
-  </el-menu-item>
-  <el-sub-menu index="one">
-    <template #title>
-      <el-icon>
-        <location/>
-      </el-icon>
-      <span slot="title">一级菜单</span>
-    </template>
-    <el-menu-item class="mr-8" index="/home">首页</el-menu-item>
-    <el-menu-item class="mr-8" index="/test">测试</el-menu-item>
-  </el-sub-menu>
-  <el-menu-item index="/about">
-    <el-icon>
-      <template #default>
-        <component is="Compass" />
+  <template v-for="menu in userMenu">
+    <el-sub-menu
+        v-if="menu.children && menu.children.length > 0 && menu.children[0].menuType.toString() === '1'"
+        :key="menu.id"
+        :index="menu.path">
+      <template #title>
+        <el-icon>
+          <component :is="menu.icon"/>
+        </el-icon>
+        <span slot="title">
+          {{ menu.menuName }}
+        </span>
       </template>
-    </el-icon>
-    <template #title>关于</template>
-  </el-menu-item>
+      <MenuTree :userMenu="menu.children"/>
+    </el-sub-menu>
+    <el-menu-item
+        class="mr-8"
+        v-else-if="menu.menuType.toString() === '1'"
+        :index="menu.path"
+        :key="menu.id">
+      <el-icon v-if="menu.icon">
+        <component :is="menu.icon"/>
+      </el-icon>
+      <span slot="title">
+          {{ menu.menuName }}
+        </span>
+    </el-menu-item>
+  </template>
 </template>
 
 <script setup lang="ts">
+import {defineProps} from 'vue'
 
+defineProps({
+  userMenu: {
+    type: Object,
+    default: () => {
+    },
+    required: true
+  },
+})
 </script>
 
 <style scoped lang="scss">

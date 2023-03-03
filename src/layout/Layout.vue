@@ -14,7 +14,7 @@
           router
           :default-active="defaultActive"
       >
-        <MenuTree/>
+        <MenuTree :userMenu="userMenu"/>
       </el-menu>
     </div>
     <div class="content-right">
@@ -59,6 +59,7 @@
 import {ref, Ref} from "vue"
 import {useRouter} from "vue-router"
 import MenuTree from "../components/MenuTree.vue"
+import list from '../mock/menuList.js';
 
 const router = useRouter()
 
@@ -66,6 +67,9 @@ let isCollapse: Ref<boolean> = ref(false)
 
 // 获取当前路由
 let defaultActive: Ref<string> = ref(location.hash.slice(1))
+
+// 用户菜单
+let userMenu:Ref<any> = ref(list)
 
 
 // 菜单收缩
