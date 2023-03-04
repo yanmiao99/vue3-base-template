@@ -8,7 +8,9 @@ import {createPinia} from 'pinia'
 import router from './router/router'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
+
 const app = createApp(App)
+const pinia = createPinia();
 
 // 引入 icon
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -18,6 +20,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app
   .use(router)
   .use(ElementPlus)
-  .use(createPinia())
-app.mount('#app')
+  .use(pinia)
+  .mount('#app')
 

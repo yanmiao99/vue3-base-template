@@ -33,6 +33,7 @@
               clearable
               show-password
               placeholder="密码 : "
+              @keyup.enter="submitForm(userFormRef)"
               autocomplete="off">
             <template #prefix>
               <el-icon>
@@ -44,7 +45,7 @@
 
         <el-form-item prop="autoLogin" class="auxiliary-box">
           <el-checkbox v-model="userForm.autoLogin" label="自动登录" size="large"/>
-          <span>忘记密码?</span>
+          <span @click="handleForgotPassword">忘记密码?</span>
         </el-form-item>
 
         <el-form-item>
@@ -60,9 +61,13 @@
 import {ref, Ref} from 'vue'
 import type {FormInstance} from 'element-plus'
 import {useRouter} from "vue-router";
+import {usersStore} from "@/store/user"
+import {storeToRefs} from "pinia"
+import {ElMessage} from "element-plus";
 
 const userFormRef = ref<FormInstance>()
 const router = useRouter()
+const store = usersStore()
 
 interface IUserForm {
   account: string,
@@ -91,17 +96,52 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
-      console.log('账号 : ', userForm.value.account)
-      console.log('密码 : ', userForm.value.password)
-      console.log('自动登录 : ', userForm.value.autoLogin)
+
+      // console.log('账号 : ', userForm.value.account)
+      // console.log('密码 : ', userForm.value.password)
+      // console.log('自动登录 : ', userForm.value.autoLogin)
+
+
+      store.account = userForm.value.account
+      store.password = userForm.value.password
+      store.autoLogin = userForm.value.autoLogin
+
+      // 只能获取非响应式数据
+      // const { account, password, autoLogin } = store;
+      // console.log(account);
+      // console.log(password);
+      // console.log(autoLogin);
+
+      const {account, password, autoLogin} = storeToRefs(store);
+      console.log(account.value);
+      console.log(password.value);
+      console.log(autoLogin.value);
+
+      store.$patch({
+        account: "张三",
+        password: '张三',
+        autoLogin: true,
+      });
+      console.log('--------------');
+
+      console.log(store.account);
+      console.log(store.password);
+      console.log(store.autoLogin);
 
       // 完成提交, 清空表单
       formEl.resetFields()
-      router.push("/welcome")
+      // router.push("/welcome")
     }
   })
 }
 
+
+const handleForgotPassword = () => {
+  ElMessage({
+    message: '请联系管理员',
+    type: 'warning',
+  })
+}
 
 </script>
 
@@ -143,6 +183,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
         & > span {
           color: #5A9CF8;
+          cursor: pointer;
         }
 
         .el-checkbox.el-checkbox--large .el-checkbox__label {
